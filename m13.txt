@@ -1,0 +1,210 @@
+M13 Release Notes
+Milestone 13
+Released on 9-September-2022.
+
+For detailed services that are included in this release, please refer to M13 tagging notes.
+
+Milestone 13
+New Features
+Bug Fixes
+❗ Breaking Changes
+Deprecation Notice
+Known Issues/Gaps
+Supporting Information
+Test results from Preship team
+Postman Collections
+Load Manifests (JSON)
+In keeping with our policy of releasing new capabilities early and often for feedback, we are pleased to introduce several new experimental platform capabilities in this milestone release. These are currently only available in specific cloud service providers. See details below.
+
+Reservoir DDMS
+External Data Services
+Manifest ingestion by reference
+New Features
+Data Definition - Refer here for full changes "OSDU schemas" and full changes "OSDU reference-values"
+Schema Highlights
+All M13 bootstrapped schemas have status PUBLISHED. Schemas shipped in M12 are unchanged; only new schema versions are added. For the complete list, please see Summary of New Schemas.
+Patch Versions for reference-data schemas, which move under PPDM content governance. The 5 patched versions are listed on this page with links to the migration instructions. Migration is optional.
+Minor updates
+FaultSystem:1.2.0 added SeismicLineGeometries
+SeismicProcessingProject:1.2.0 added BinGridID
+SeismicTraceData:1.2.0 time lapse support added
+VelocityModeling:1.1.0 added SeismicLineGeometries
+External Data Services/ConnectedDataSource schemas and reference-data types. Introduction via worked examples here.
+PerforationJob and PerforationInterval (preliminary worked examples)
+with 17 reference value lists.
+Reference Values Highlights
+PPDM Governed Reference Value Lists,
+including BitType:1.0.1, SeismicMigrationType:1.0.1, SeismicPickingType:1.0.1, SeismicWaveType:1.0.1, VerticalMeasurementType:1.0.1.
+Changes are documented here.
+External Data Services added 2 reference value lists OAuth2FlowType:1.0.0 and SecuritySchemeType:1.0.0.
+17 Perforation related reference value lists, some with preliminary content.
+Add value "SEG-Y" in SchemaFormatType
+Updated Glossary
+Extended Schema Usage Guide, specifically a new section about OSDU Schemas
+Core and Helper Services
+OS core common
+Added data hash and recordBlocks fields as per ADR 92
+Added OPA translation integration to allow new endpoints. See MR !161
+OS core lib Azure
+Added undelete operation to enable restoring soft-deleted blobs. See MR !216
+File
+IBM Now supports file checksum implementation. See MR !314
+Dataset
+Added support for External Data Services. See MR !218
+Search
+Added support for multi-polygon intersection query. See MR !301
+Optimized queries for data root user. See MR !298
+Indexer
+Provided indexer resiliency updates if aliased index co-exist. See MR !345
+Added error exception message to allow troubleshooting. See issue #67
+Apache SIS
+Updated the Apache SIS library to version 1.2. This release includes quite a lot of bug fixes as well as a number of improvements. The most notable features are
+Read World Files and ESRI ASCII grid and BIL/BIP/BSQ rasters
+Support for Lambert Azimuthal Equal Area projections
+Support ESRI WKT element GEOGTRAN
+More features and descriptions can be found at the library release notes
+CRS Conversion v3
+The Convert service can now handle Operator defined Transformations between geodetic datums, i.e., a PersistableReference using WKT using GEOGTRAN. Previously the EPSG code was extracted from the PR and used. If that code did not exist in the Apache SIS library then no transformation would be executed. Now the WKT is parsed and used if the given code cannot be found in the Apache SIS library. See Issue #46 Converter Service.
+The EpsgManifestGenerator script has been updated to dynamically generate WKT (PersistableReferences) for CRS and CT entities not in the Esri lookup files.
+CRS Catalog v3
+Improve v3 Search endpoints. See MR !169
+POST CRS and POST CT
+Change default search limit to a large value (10000)
+Add includeDeprecated (exclude InactiveIndicator: true)
+Add field “returnAllFields”
+Change the default return fields
+Make schema authority configurable with an env var “SCHEMA_AUTHORITY”
+POST CRS
+Correct the handling of returnBoundProjectedAndProjectedBasedOnWgs84 and returnBoundGeographic2DAndWgs84
+Change extent.name to extent.description (the reason it was not working before was because extent.description was not in initial version of schema)
+POST CT
+Make source and target crs interchangable
+Add id and code
+Remove "includeHorizontal" and "includeVertical" and add kind instead. Add "All" as a magical keyword. Use “excludeVertical” as default.
+Updated Swagger docs. See MR !154
+Ingestion Services
+Manifest Ingestion by Reference
+Available in GCP only. (other CSPs to follow later)
+Ingestion By Reference feature stores only the Record_Id of a manifest into the XCOM context and access it from the different DAGS/operators. Ingestion can now be triggered by a record_id (of a manifest uploaded on the DatasetService) instead of a complete manifest. This can eventually enhance the performance. Read more in MRor see the Postman collection.
+SegY to OpenVDS conversion DAG
+Byte location is now supported from Dataset (FileCollection.SegY) provided. See issue #12
+Azure Now supports SDSTORE similar to SegY to OpenZgy conversion process. See details in this issue #13
+DDMS
+Seismic DDMS
+Implementation for [ADR] Domain API
+Reservoir DDMS
+Link to repository
+Full release notes
+Data service for geo-modeling and reservoir simulation domains. It can be used as system of record and also support long running workflows for model creation.
+Offers two APIs, a REST API and a Energistics Transfer Protocol API to ingest and retrieve reservoir models using Energistics RESQML standard.
+The very first release of this feature.
+Partial implementation includes ETP server and ETP client
+Implemented in Azure only (other CSPs to follow later)
+Wellbore DDMS
+Issue #43, adding support of:
+Well 1.1.0
+Wellbore 1.1.0
+WellboreMarkerSet 1.2.0
+Marker documentation added, see !571
+External Data Services (EDS)
+See detailed notes on this.
+The very first release of EDS. Currently available in Azure environment only. (other CSPs to follow later)
+EDS allows connection to the data providers (OSDU external source environment), fetch the data and ingest it into the operator OSDU environment.
+This release offers two capabilities.
+Registration Process - This functionality enables the registration (persistence) of configuration information needed for automated services to orchestrate Fetch and Ingestion workflows between a consuming OSDU Data Platform and OSDU compliant data sources.
+Fetch and Ingest (External Data Workflow Services) - Automated services that consume the Registration Process (also called Source Registry configuration) to handle the Fetch and Ingest orchestration.
+EDS DMS feature (for obtaining bulk data files "on demand") is deferred till next release.
+Associated DAGS deployed - eds_ingest and eds_scheduler
+New schema entities to support EDS
+Master - ConnectedSourceRegistryEntry:1.0.0, ConnectedSourceDataJob:1.0.0
+Reference - SecuritySchemeType:1.0.0, OAuth2FlowType:1.0.0
+GCZ (Geospatial Consumption Zone)
+The very first release of GCZ. Only available from code base. Not yet implemented by any CSPs.
+Implements transformer, consumer, map integration for common mappable objects.
+Please refer to GCZ overview for details.
+Bug Fixes
+Core and Helper Services
+Storage
+Fixed error message using response from OPA. See issue #133
+Fixed OPA endpoint config. See MR !426
+File
+Fixed issue on the PreloadFilePath attribute. See issue #82
+Azure Fixed slow requests to POST metadata. See issue #69
+Notification
+Azure Fixed issue on notification error messages. See issue #44
+Dataset
+Fixed issue on the PreloadFilePath attribute. See issue #82
+Fixed internal server error messaging response. See MR !214
+Partition
+Fixed partition property id. See MR !212
+Search
+Removed non-functional and deprecated CCS endpoint from Search service. See MR !302
+Indexer
+Fixed mapping for text array attribute inside nested array object. See issue #72
+CRS Conversion V3
+Fixed parsing of WKTS with file parameters. See issue #60
+DDMS
+Seismic DDMS
+Fixes related to list API in Azure
+General bug fixes & stability improvement. Refer to service, sdapi, and sdutil for detailed notes
+Wellbore DDMS
+Security fix, upgrade pyJWT library. See issue #43
+Documentation fixes and clean up.
+Log recognition APIs mounted as other APIs.
+no longer retry on calls to storage in case of failure or timeout. see !585.
+Azure pipeline: Migrate python image to use MCR, see !587.
+Fixes in well log consistency validation: #46, #47
+Open Test Data
+Fixes in different modules to align the code to the data schema. This fixes the GetretrievalUrl method in the Dataset module for the TNO/Volve dataset - see #82
+Various security fixes
+❗ Breaking Changes
+Deprecation Notice
+DDMS
+Seismic DDMS
+Azure database model changes. Refer here for more info.
+File DMS
+File DMS is being deprecated
+Known Issues/Gaps
+Core and Helper Services
+
+Search
+A search for UOM by record id using query “osdu:reference-data--UnitOfMeasure:ft:” returns ft[US] and ft[GC] units. A query for "osdu:reference-data--UnitOfMeasure:ft[US]" does not work and neither does "unitZ": "osdu:reference-data--UnitOfMeasure:ft%5BUS%5D"
+CRS Conversion V3
+ConvertTrajectory
+Incorrectly adds meters to feet and feet to meters if the unit of the projected CRS is in the one and the Measured Depths are in the other. See issue #52.
+Gap: there is no option to compute a wellpath without applying a correction for map projection point scale factor. See issue #29
+All CoordinateTransformations stored in OSDU must be “to WGS 84”. It is not guaranteed that the generated reference data satisfies this because it is not checked. Geodetic reference data loaded to OSDU are OK, and in general transformations are 99.99% defined as such in the EPSG Database, but EpsgManifestGenerator does not check for this. See issue #44
+Convert does not return continuous Eastings when converting latitude, longitude to a local projected CRS that spans the antimeridian (the 180d meridian), e.g., for a seismic line from 179E to 179W. This has no impact unless such local projection would be used (which is uncommon). See issue #49.
+Convert custom WKT for a grid file Transformation expects parameter name expected by SIS is "Latitude and longitude difference file" for NTv2 method (and similar for NADCON and vertical models). EpsgManifestGenerator and the underlying database do not typically contain the correct file names. Hence, any custom WKT for transformations that are not implicitly defined by the EPSG code and stored in the Apache SIS library will not work. This is a low priority/low value, because in general Operators will not create NTv2 custom files (there is a small risk a new transform is defined by EPSG that is intended to be used, but before SIS is updated). See issue 39
+convertTrajectory does not allow interpolation on a specific MD (which is needed to get the TVD for a log at a given MD that is not in the survey). See issue 29
+CRS Convert has no endpoint for Bin Grid squaring, deriving p6 parameters, and conversion. Such checks (if the grid is square, and derive the parameters from the corners) should be part of the seismic ingest workflow which then would need such endpoint to be developed. See issue 27
+CRS Convert has no endpoint that directly returns the point scale factor and grid convergence at a given location. ConvertTrajectory can be called with a dummy call to obtain these. See issue 29
+CRS Convert cannot execute a direct transformation between CRS A and CRS B, it requires a pivot (through WGS 84). See Issue #15 Converter Service. Also see issue 34
+Data Flow Services
+
+Manifest based Ingestion
+AWS - 503 response when ingesting 50k records. See issue #356
+Azure - 413 response when ingesting 50k records. See issue #362
+IBM - 504 response when ingesting 50k records. See issue #357
+GCP - 502 response when ingesting 50k records. See issue #365
+WITSML Parser
+Failure when schema-authority is not the same as data partition ID. See issue #347
+Reference data SchemaFormatType - need to add manually EnergisticsWITSML. See issue #62
+Tubular issue - need to pre-create parent record manually. See issue #58
+Problem with Trajectory data type - recent change for schema 1.1.0. See issue #61
+LAS loader for Wellbore DDMS
+Broken due to change in schema structure. See issue #53
+Supporting Information
+Test results from Preship team
+Overall summary can be found here
+Folder with documented steps and test results - here
+Postman Collections
+Ingestion by Reference
+CRS Catalog V3
+CRS Conversion V3
+Load Manifests (JSON)
+Added Seismic 4D to worked examples
+Updated Wellbore Trajectories for TNO
+Updated Wellbore Trajectories for Volve
+Vertical Seismic Profile added for NOPIMS
+Seismic 2D traces and navigation added for Volve

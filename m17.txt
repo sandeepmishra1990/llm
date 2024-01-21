@@ -1,0 +1,267 @@
+M17 Release Notes
+Milestone M17
+Released on 10-May-2023
+
+For a complete overview of the issues and merge requests, please refer here.
+
+For detailed services that are included in this release, please refer to M17 tagging notes.
+
+❗ Important Note
+Breaking Changes
+Deprecation Notice
+Seismic DDMS
+
+Deprecated Azure database model is not supported anymore. Refer here for more info.
+Dataset
+
+Remove deprecated functions from DatasetDmsApi. See MR !319
+M17 will not be supported in IBM environment.
+
+Experimental Features
+In keeping with our policy of releasing new capabilities early and often for feedback, we are pleased to introduce several new experimental/early release platform capabilities in this milestone release. These are currently only available in specific cloud service providers with limited scopes and functionalities, future milestone release will include more CSP support. Please refer to the details below.
+
+Policy service (Experimental/Early Release) - AWS, Azure, GCP
+GCP Performance issue is noted during preship testing, Policy service is OFF by default.
+AWS Policy service is ON by default.
+Azure Policy service is ON by default.
+Reservoir DDMS (Experimental/Early Release) - Azure
+External Data Services (Experimental/Early Release) - Azure, GCP, AWS
+Geospatial Consumption Zone (Experimental/Early Release) - Azure (Developer/Local Profile)
+Manifest ingestion by reference (Experimental/Early Release) - GCP, AWS, Azure
+Table of Content
+Milestone M17
+❗ Important Note
+Breaking Changes
+Deprecation Notice
+Experimental Features
+Table of Content
+New Features
+Data Definition
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+GCZ (Geospatial Consumption Zone)
+Structural Changes
+Wiki Changes
+Demo Webapp Updates
+Transformer Enhancements
+Bug Fixes
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+GCZ (Geospatial Consumption Zone)
+Transformer Bug Fixes
+Enhancements
+Core and Helper Services
+Ingestion services
+Known Issues/Gaps
+Core and Helper Services
+Ingestion services
+External Data Services (EDS)
+Seismic DDMS
+Supporting Information
+OSDU Community utilities
+New Features
+Data Definition
+As with recent milestones, M17 does not contain any in-place schema changes (no M16 schema resources were changed in-place). Refer here for full list of OSDU changes "OSDU schemas" and full changes "OSDU reference-values"
+
+Extensions to work-product-component entities All work-product-component group-type entities (see the list of work-product-component entities impacted) include AbstractWPCGroupType, which has been subject to the following extensions:
+New DDMSDatasets[] property to record 'optimized content' in addition to existing 'original content' (Datasets[]) and derived artefacts (Artefacts[]). Details are explained in the Schema Usage Guide.
+New NameAliases[] referring to AbstractAliasNames, adding the same support for alias names as for all master-data.
+Including the extended version of AbstractTechnicalAssurance.
+Reference Value Changes/Updates
+New reference value lists, overview here.
+Value lists new under PPDM Governance.
+Well Planning lists with changed (→ OPEN) governance.
+TechnicalAssurance WorkflowPersonaType and WorkflowUsageType
+Seismic Domain Changes
+Support for field data was added:
+New dataset--FileCollection.SEGD:1.0.0, a sibling to dataset--FileCollection.SEGY:1.0.0 for the seismic field data content.
+New work-product-component--SeismicAcquisitionDocuments:1.0.0 collecting all acquisition related documents and datasets with the
+new work-product-component--SeismicFieldTraceData:1.0.0 representing the business object for the field data. The type is modelled similar to the SeismicTraceData, however as a separate type to avoid mixing with the processed data.
+Well Domain Changes
+Extension to master-data--WellboreOpening:1.1.0 to refer to an opening type.
+Extensions to master-data--HoleSection:1.2.0.
+Extensions to master-data--SurveyProgram:1.1.0 allowing survey sections to refer to different Wellbores and WellboreTrajectories.
+Extensions to work-product-component--TubularAssembly:1.1.0 with an explicit VerticalMeasurement structure as in other wellbore related entities.
+Extensions to work-product-component--WellboreTrajectory:1.2.0 adding summary information.
+Note: this version is not yet supported by the Wellbore DDMS in M17
+Extensions to work-product-component--WellLog:1.3.0 to disclose mud/fluid and conveyance method during logging.
+Note: this version is not yet supported by the Wellbore DDMS in M17
+Note: The implicit changes via AbstractWPCGroupType:1.1.0 to WellboreIntervalSet:1.1.0 and WellboreMarkerSet:1.3.0 are also not yet supported by the Wellbore DDMS in M17.
+Core and Helper Services
+Indexer
+Enable geo-shape decimation for all the kinds that have spatial location. See MR !498
+Schema
+Resolve "OSDU-DD-Delivery-M17 (v0.20.0)". See MR !458
+Storage
+Added modify user and time info. See MR !642
+Extend patch API to support data block modification. See MR !639
+Policy
+Minor updates. See policy release notes
+Ingestion services
+Segy to Zgy Conversion
+Major performance work, adding GSM logging module and created authentication plugin framework module.. See MR !195
+Segy to oVDS Conversion
+M17 has been tested with release 3.2.3
+DDMS
+Seismic DDMS
+Enabled dynamic policy service in API V4 MR676
+Added md5 checksums for Azure in C++ Library
+Wellbore DDMS
+New CRUD APIs for wellbore interval set:
+OpenAPI Wellbore IntervalSet
+schema Wellbore IntervalSet 1.0.0
+Reservoir DDMS
+Change approach to get connection info MR !32
+Remove limit in queue message
+Added condition to check pod status
+Manifest generation ported to M17 schemas, including technical assurance.
+External Data Services (EDS)
+EDS - Handling Parent data mapping Issue 270
+Introduce Password Credential OAuth Flow Type Issue 267
+Auto-generate Refresh Token for RefreshTokenKeyName OAuth Flow type when expired Issue 19
+GCZ (Geospatial Consumption Zone)
+In an effort to align the GCZ project's structure more closely with other OSDU Core / DDMS services, we have updated the structure of the Geospatial Consumption Zone repository (see PR).
+
+Structural Changes
+osdu_gcz_transformer directory is now gcz-transformer
+osdu_gcz_provider directory is now gcz-provider
+osdu_gcz_test_assets directory is now gcz-test-assets
+osdu_gcz_wiki directory is now gcz-docs
+Contents of the root assets folder have been relocated to gcz-docs/assets
+Root ignite folder and osdu_gcz_transformer/ignite folder have been removed from the repository
+These were GCZ byproducts and are not relevant to new consumers
+Transformer src code has been relocated to gcz-transformer/gcz-transformer-core
+Provider src code has been relocated to gcz-provider/gcz-provider-core
+devops and provider directories have been added to both gcz-transformer and gcz-provider directories with subdirectories for CSPs to extend upon or provide their own documentation and deployment strategies relevant to their specific environments (foundation to support SPI model for thin, CSP-specific extensions of the core code)
+Transformer config files (application-local.yml, application-remote.yml, and application-k8s-remote.yml) have been merged into a singular application.yml file and that file has been relocated into the gcz-transformer/.config directory
+Provider config file koop-config.json has been relocated into the gcz-provider/.config directory
+Wiki Changes
+All outdated file/directory references replaced with the new standardized iterations
+New detailed page on Environment Variables
+Post Deployment Testing document has been updated:
+Reorganized testing methods in order of preference and ease-of-use.
+Relegated optional testing procedures to an "advanced" section.
+Provided more detail on geometry spatial query parameters.
+Provided more detail on entitlement roles expected when using Ambassador endpoints
+Logs have been given their own document
+Common Log Errors section added to assist with deployments
+Example for Remote Profile vs Local Profile added to root Wiki ReadMe to improve accessibility for answers to common questions regarding profiles
+Demo Webapp Updates
+Feature Table added to JSAPI HTML test to help identify location of small, scattered features
+Transformer Enhancements
+Support for 3D Seismic Live Trace Polygons tested and confirmed through SeismicTraceData kind
+The singular application.yml file now natively supports environment variables for all parameters (except for kinds)
+Add support for new scope parameter for authenticating with OSDU (db086757)
+Built-in CSV Parser now supports reading from a Byte Stream for ingesting CSV files directly from OSDU
+GC Module added for Authentication customization
+Bug Fixes
+Core and Helper Services
+Search
+Ignore unmapped fields on geo-queries. See MR !454
+Set IndicesOptions ignoreUnavailable to be true to skip the non-exist indices in the SearchRequest. See MR !450
+Use VMCache instead of map in memory to cache the index aliases. See MR !447
+Added policy error handling (GONRG-6457). See MR !445
+Indexer
+Add validation and ignore out of order message when kind is updated. See MR !511
+Use Index API to update the record. See MR !488
+Don't throw exception on property block (with special character) on geojson. See MR !364
+Schema
+Continue build if dependency-maven-check failed. See MR !468
+Storage
+Patch fixes. See MR !665
+Spatial location array. See MR !644
+File
+Fix for premature staging file deletion for issue#76. See MR !426
+Register
+Fix validation regex for localid. See MR !317
+Policy
+None
+Ingestion services
+osdu-ingestion-lib
+Fix: file source validator. See MR !45
+DDMS
+Reservoir DDMS
+
+Cross-relations prevent deleting multiple-objects MR !39
+Seismic DDMS
+
+Removed background job for detect running version of azure cosmos
+Gonrg-6641 fix redis connection
+Gonrg-6641 fix redis connection
+Missing field in readonly access_policy
+General bug fixes & stability improvement. Refer to service, sdapi, and sdutil for detailed notes
+Wellbore DDMS
+
+Third party vulnerability fixes: upgrade of fastapi to 0.94.1, starlette to 0.26.1, cryptography to 39.0.2: see MR 718
+GC/Anthos: parameter to control log level
+External Data Services (EDS)
+EDS DMS: Fetch Dataset URL from activity Parameter of CSRE Issue 260
+Conversion of the ConnectedSourceDataPartitionID to OnIngestionDataPartitionID for Array Datatype Issue 261
+Adding Logger to give details about Osdu_ingest run id and Sample fetched data record Issue 18
+EDS - Raise exception when Airflow Variable not found or None Issue 21
+EDS - Adding Dynamic Schema Authority for Kind of CSRE, CSDJ, ExternalReferenceValueMappings using Airflow variable Issue 22
+GCZ (Geospatial Consumption Zone)
+Transformer Bug Fixes
+Resolved JSON Exception error when Transformer encountered empty arrays during 3D Seismic record ingestion (afb4eb56)
+Enhancements
+Core and Helper Services
+Search
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !459
+Indexer
+Added logs for not found records. See MR !502
+Enable the feature flag for geo-shape decimation by default. See MR !486
+No retry on storage 500. See MR !454
+Schema
+OpenAPI 3.0 Documentation using springdoc. See MR !470
+Storage
+Handling data inconsistency. See MR !650
+Added logs for not found records. See MR !648
+Added logs for not found records. See MR !643
+Remove not necessary content header requirement. See MR !634
+Indexer Queue
+Add correlation and data-partition id to custom metric. See MR !321
+File
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !433
+Dataset
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !317
+Notification
+Add subscriber notification request request/dependency logging. See MR !348
+Register
+OpenAPI 3.0 Documentation using springdoc. See MR !332
+Partition
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !359
+Legal
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !370
+Entitlements
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !448
+Secret
+List secret by name and deprecate listing of all secrets. See MR !59
+Policy
+Minor enhancements. See policy release notes
+Ingestion services
+osdu-airflow-lib
+Put_file api call for uploading the file to datasetdms client. See MR !52
+Known Issues/Gaps
+Refer here for a list of known pre-shipping testing issues.
+
+Core and Helper Services
+Policy
+Known issues with policy service see policy release notes
+Dataset service
+Handling of File Collection in various CSPs
+Ingestion services
+WITSML Parser
+Issue with Trajectory data type
+External Data Services (EDS)
+Issue with EDS DMS in GC environment
+Seismic DDMS
+SegY to oZgy conversion in GC environment
+Supporting Information
+OSDU Community utilities
+AdminCLI and new Policy Management Desktop Client UI
+Release notes for AdminCLI
+Documentation for Policy Management Desktop Client

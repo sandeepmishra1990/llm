@@ -1,0 +1,250 @@
+M19 Release Notes
+Milestone M19
+Released on 11-August-2023
+
+For a complete overview of the issues and merge requests, please refer here.
+
+For detailed services that are included in this release, please refer to M19 tagging notes.
+
+❗ Important Note
+We continue to observe issues reported around missing data block and search performance issues with both experimental indexer augmentation flag and policy service turned on. See section below for more details. We are still investigating the root cause and will continue to monitor this. These features are turned OFF by default and it is highly recommended to turn off both flags to ensure performance and data integrity.
+
+In M19 release, we have successfully completed the migration of two core services from Java 8 to Java 17 LTS - Legal and Register. This migration marks an important step in our commitment to delivering the highest standards of security, performance, and platform stability across all our services. See here for more details.
+
+Sandbox / Incubator
+Project status: https://osdu.projects.opengroup.org/pmc/work-products/pmc-portal/pmc-policies/main/maturity/project-list.html
+
+In keeping with our policy of releasing new capabilities early and often for feedback, we are pleased to introduce several new Sandbox / Incubator platform capabilities in this milestone release. These are currently only available in specific cloud service providers with limited scopes and functionalities, future milestone releases will include more CSP support. Please refer to the details below.
+
+Policy service - AWS, Azure, GC, IBM
+External Data Services - Azure, GC, AWS
+Geospatial Consumption Zone - Azure
+Manifest ingestion by reference - GC, AWS, Azure
+Rock and Fluid Sample DDMS - Azure
+For the evaluation metrics - please refer to the guide here
+
+Deprecation Notice
+We are now actively engaged in the process of integrating the functionalities of the File and Dataset services. It is important to note that, going forward, our primary focus will be on enhancing and prioritizing the capabilities of the Dataset service in the domain of file/dataset delivery. As of the present, both services remain accessible and operational. Further elaboration on this matter will be communicated in due course.
+Table of Content
+Milestone M19
+❗ Important Note
+Sandbox / Incubator
+Deprecation Notice
+Table of Content
+New Features
+Data Definition
+M19 (v0.22.0) Additions
+M21 (v0.24.0) M22 (v0.25.0) Change Warning
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+Bug Fixes
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+Enhancements
+Core and Helper Services
+Ingestion services
+GCZ (Geospatial Consumption Zone)
+Known Issues/Gaps
+Core Services
+Supporting Information
+New Features
+Data Definition
+M19 (v0.22.0) Additions
+Data Quality
+Feedback via practical use of DataQuality:1.*.* caused a major revision of the data quality related entities. The amount of change justified a clean start with a breaking change work-product-component--DataQuality:2.0.0. The new record captures evaluated rules and their assessment states, as well as the scores by quality dimension:
+DataQuality:2.0.0
+referring to better named reference data DataQualityRule and DataQualityRuleSet; the latter can now aggregate rules and other rule sets and is used by technical assurance.
+This is the first major version change, which can be used to train more complex record upgrades. A simplistic JOLT transformation is provided but needs adaptation to actual usage patterns for DataQuality:1...
+TechnicalAssurance
+The TechnicalAssurance records can now be associated with the DataQualityRuleSet (see above) passing/failing the acceptable and unacceptable usages. Quality assessment evidence can be supplied by a relationship to a DataQuality record. In addition to the extensions, the property naming has been improved. The migration instructions are recorded in this report.
+The new version of the schema fragment AbstractTechnicalAssurance:1.2.0 is included by:
+AbstractMaster:1.2.0, which is included by all 52 master-data types existing in M18 and earlier.
+AbstractWPCGroupType:1.2.0, which is included by all 68 work-product-component types existing in M18 and earlier.
+Column Based Tables
+The column definition for work-product-component--ColumnBasedTable:1.2.0 and AbstractColumnBasedTable:1.1.0 has completed by a modification of AbstractReferencePropertyType:1.1.0: A column unit of measure context can be defined via UnitOfMeasureID, and the column name in the dataset can be associated with the column definition in the work-product-component record. The impacted types are:
+AbstractColumnBasedTable:1.1.0
+work-product-component--ColumnBasedTable:1.2.0
+work-product-component--WellboreIntervalSet:1.2.0 (including AbstractColumnBasedTable:1.1.0)
+Reservoir Management
+The previous experimental relationship targets Reservoir:0.0.0 and ReservoirSegment:0.0.0 are replaced by 'proper'
+master-data--Reservoir:1.0.0
+master-data--ReservoirSegment:1.0.0
+And the following work-product-component types:
+work-product-component--ReservoirModelScenario:1.0.0
+work-product-component--ReservoirEstimatedVolumes:1.0.0
+The extensions of AbstractReferencePropertyType:1.2.0 were used in the WorkedExample for ReservoirEstimatedVolumes
+3 Reservoir Management specific reference value lists have been provided.
+Minor Extensions
+Seismic Datasets can now declare their individual numeric resolution, e.g. dataset--FileCollection.SEGY:1.1.0, and compression state where applicable, e.g. dataset--FileCollection.Bluware.OpenVDS:1.1.0.
+AbstractInterpretation got extended by MeanPossibleAge, effectively adding this to 15 interpretation specializations.
+Well Domain: corrections to work-product-component--FormationIntegrityTest:1.2.0
+Preferred Schema Version configurations
+A new reference value list reference-data--PreferredSchemaVersion:1.0.0 is made available, which allows platform owners and operators to 'control' the schema version adoption by setting guidelines: minimum required schema version, maximum permitted and preferred version. At the moment, there is no documented usage. The reference value list is under LOCAL governance, thus under owner/operator control. OSDU will default the list with the first and latest major schema versions. The code for the records is defined via the kind, stripped by the minor and patch version numbers, e.g. osdu:wks:master-data--Wellbore:1.. The current OSDU defaults are provided in this manifest. See also the Schema Usage Guide Appendix D.5 Schema Version Management/Configuration.
+M21 (v0.24.0) M22 (v0.25.0) Change Warning
+OSDU uses group-type classifications for the entities. The definitions for the group-types are provided in the Schema Usage Guide. Over time some of the entities' group-type classifications have been challenged. The following types appear in the wrong group-type:
+
+Reports are seen as non-tangible state descriptions/snapshots
+master-data--FluidsReport proposed migrated to → work-product-component--WellFluidsReport.
+master-data--OperationsReport proposed migrated to → work-product-component--WellOperationsReport.
+Tubulars - when exchanged they are often transported using datasets/files, but the data themselves are tangible and associated with an investment making them master-data.
+work-product-component--TubularAssembly proposed migrated to → master-data--TubularAssembly.
+work-product-component--TubularComponent proposed migrated to → master-data--TubularComponent.
+work-product-component--TubularExternalComponent proposed migrated to → master-data--TubularExternalComponent.
+Obviously, this will impact operators who have ingested a large number of such data/records. This advance notice is intended to prepare for this change and/or engage with data definitions, specifically the Well Delivery work-stream, to influence the implementation of the change.
+
+There is a schema preview including documentation provided in the Data Definitions community mirror.
+
+Update 2023-09-26: the migration is postponed until M22 (v0.25.0).
+
+Core and Helper Services
+Indexer
+Implement reindex records API. See MR !556 by (@mzhu9)
+Schema
+Resolve "OSDU-DD-Delivery-M19 (v0.22.0)". See MR !515 by (@gehrmann)
+Entitlements
+Stop adding usrs.data.root group to all data groups. See MR !477 by (@mzhu9)
+Policy
+Performance and logging updates. See MR !389 by (@hutchins)
+Added Correlation-ID in response headers for most API calls
+Added audit information in logs when policies are updated or deleted
+See Policy Release notes for more details
+CRS Conversion
+Resolve "convertTrajectory enhancements for scale and interpolation". See MR !323 by (@kiranallamsety)
+Ingestion services
+Enabling User context in Ingestion - ADR
+
+csv-parser
+Manifest-based Ingestion
+SegY to vds conversion
+SegY to zgy conversion
+Segy to Zgy Conversion
+
+Expose OpenZGY IOCONTEXT values with new environment variables: SEGYTOZGY_IOCONTXT_BUFFER_SIZE, SEGYTOZGY_IOCONTXT_WRITE_THREADS, SEGYTOZGY_IOCONTXT_CPU_THREADS, SEGYTOZGY_IOCONTXT_IO_THREADS. Default settings will acquire less memory for IOCONTEXT than it was before.
+Handling of SGY files with incorrect Trace Header value for samples per trace.
+Removed openssl dependency
+Fixed calculation of SEG-Y Index sample rate for Depth volumes
+Fixes of executables exiting
+Load context when json contains only data member
+Optimization improvement: reuse readers for SEGY session, don't close in case of no performed writes
+Small code refactoring according to the code style and static analysis tool.
+See MR !288 by (@ErikDahl)
+DDMS
+RAFS (Rock and Fluid sample) DDMS
+First release in Azure
+Reservoir DDMS
+Now available on all CSPs Azure, AWS, GC, IBM
+Seismic DDMS
+GC - Adopt standard OSDU approach
+Dataset size performance boost
+Add seismic Filemetadata v2 endpoints
+Added seismic horizon API endpoints
+Add userid logging for Azure
+GC multipartition
+Allow turnoff of translate-user-info
+Add azure hot and cool storage tiers option for cp command
+Wellbore DDMS
+Bulk data statistic computation can be delegated to wellbore bulk worker service. (MR 752)
+Writing bulk data without session (no chunking) can be delegated to wellbore bulk worker service. (MR 751)
+External Data Services (EDS)
+EDS Parent Data Mapping issue 268
+Fetch-and-Ingest logic for handling company name (Organisation) issue 17
+EDS DMS - Enhancing EDS DMS for Bulk Data Retrieval and Including Additional Fields for Order Placement issue 271
+Enhance the eds_ingest to incorporate OSDU Ingest by Reference. issue 273
+Keep Only DAG Files in the DAG Folder issue 9
+Design work- Determine the alignment of EDS with advanced use cases for bulk data retrieval and DDMS
+Naturalizing the external bulk data into internal ADR Link
+De-Naturalize the bulk data
+Alignment with WellBore DDMS
+Bug Fixes
+Core and Helper Services
+Schema
+Fixed Preship Issue #521 - Azure PUT /api/schema-service/v1/schemas/system. See MR !510 by (@shreyashah)
+File
+Fix: duplicate PreloadFilePath value. See MR !478 by (@sagar_thapa)
+Dataset
+Added handling for non-Ok responses from DMS. See MR !361 by (@Rustam_Lotsmanenko)
+Policy
+Bugfix for eval and compile api based upon spec-based API tests. See MR !383 by (@hutchins). See Policy Release notes for more details
+Ingestion services
+osdu-airflow-lib
+Fixed a bug to enable well record testing for parent data mapping. See MR !72 by (@jeyakumar-jk)
+DDMS
+Reservoir DDMS
+
+Server: remove limit to 99 simultaneous server connection issue
+Seismic DDMS
+
+Allow translate-user-info to be false
+Add user datalake ops as tenant admin
+Fixes an issue where the size of a dataset may return incorrectly in GC
+use non-root container
+Allow imptoken without context
+Bug that was caused by stoi
+Specify dash is reserved on AWS only
+Cp download and upload with incomplete paths
+General bug fixes & stability improvement. Refer to service, sdapi, and sdutil for detailed notes
+Wellbore DDMS
+
+Security fixes, update version of Dask distributed, Tornado, FastAPI, Starlette: see MR 762
+Azure update ingress api version 758.
+GC deployment: add global variable limitsEnabled 760.
+External Data Services (EDS)
+EDS DMS Issue in GC 495
+Enhancements
+Core and Helper Services
+Indexer
+Prevent any exception from Augmenter functions to corrupt the normal indexing. See MR !583 by (@zhibinmai)
+Implement Redis cache in Azure for two kinds of object caches that are.... See MR !572 by (@zhibinmai)
+Avoid using wildcard search to find the associated children records. See MR !561 by (@zhibinmai)
+Remove feature flag for geoshape decimation. See MR !558 by (@zhibinmai)
+Storage
+Enhance crs error messages. See MR !724 by (@ajoshi19)
+Add request timeout for crs conversion service. See MR !712 by (@ykondakov)
+Pass data authz if user belongs to users.data.root group. See MR !694 by (@mzhu9)
+File
+Added authorizationFilter for some endpoints (GONRG-7434). See MR !487 by (@Stanislav_Riabokon)
+File Revoke URL API. See MR !476 by (@thulasi_dass)
+Register
+Add entitlements-changed to azure topics. See MR !373 by (@ylesnikau)
+Configure register service to be aware of Entitlements Change topic. See MR !359 by (@KellyZhou)
+JDK 17 migration. See MR !357 by (@thulasi_dass)
+Legal
+Java 17 migration. See MR !413 by (@Rustam_Lotsmanenko)
+Entitlements
+Entitlements Change Event Publishing. See MR !490 by (@KellyZhou)
+Unit
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !288 by (@jayeshbagul)
+CRS Catalog
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !288 by (@jayeshbagul)
+CRS Conversion
+OpenAPI 3.0 Documentation using springdoc. See MR !330 by (@jayeshbagul)
+Policy Service
+Enhanced support for developers - additional details in /config, .env suppport, logging updates
+Updated payload validation for /compile, /eval and /translate (search) and better error handling
+See Policy Release notes for more details
+Ingestion services
+Segy to Zgy Conversion
+Added changes for User-Context-Ingestion. See MR !289 by (@deepapathak)
+GCZ (Geospatial Consumption Zone)
+Updated Kubernetes deployment wiki with Helm Charts
+Known Issues/Gaps
+Refer here for a list of known pre-shipping testing issues.
+
+Due to the limitation on resources, thorough testing was only conducted on Azure and GC environments. For full scope - please refer here
+
+Core Services
+Policy service
+Performance degradation is observed with policy service turned on. See issue 574, 541 and 93
+File service
+Computed checksum value does not match the expected value. See issue here
+Storage service
+Patch API fails when used with Policy service enabled. See issue here
+Supporting Information
+Data Loading Guide. See here
+Preship team's test results (documented steps). See here
+Postman collections from QA aka "Platform Validation" team. See here
+JSON payload and related information for loading sample data from TNO, Volve, NOPIMS. See here

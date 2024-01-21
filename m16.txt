@@ -1,0 +1,257 @@
+M16 Release Notes
+Milestone M16
+Released on 15-Mar-2023
+
+For a complete overview of the issues and merge requests, please refer here.
+
+For detailed services that are included in this release, please refer to M16 tagging notes.
+
+❗ Important Note
+Experimental Features
+In keeping with our policy of releasing new capabilities early and often for feedback, we are pleased to introduce several new experimental/early release platform capabilities in this milestone release. These are currently only available in specific cloud service providers with limited scopes and functionalities, future milestone release will include more CSP support. Please refer to the details below.
+
+Policy service (Experimental/Early Release) - AWS, Azure, IBM, GCP
+GCP Performance issue is noted during preship testing, Policy service is OFF by default.
+AWS Policy service is ON by default.
+Azure Policy service is ON by default.
+IBM Policy service is OFF by default.
+Reservoir DDMS (Experimental/Early Release) - Azure, IBM
+External Data Services (Experimental/Early Release) - Azure, GCP, AWS
+Geospatial Consumption Zone (Experimental/Early Release) - IBM, AWS (Developer/Local only)
+Manifest ingestion by reference (Experimental/Early Release) - GCP, IBM, AWS, Azure
+Deprecation Notice
+We will plan to deprecate the non-REST convention dataset API as per the approved ADR 29 in Milestone 17. See MR !319
+
+Table of Content
+Milestone M16
+❗ Important Note
+Experimental Features
+Deprecation Notice
+Table of Content
+New Features
+Data Definition
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+GCZ (Geospatial Consumption Zone)
+Bug Fixes
+Core and Helper Services
+Ingestion services
+DDMS
+External Data Services (EDS)
+Enhancements
+Core and Helper Services
+Ingestion services
+Known Issues/Gaps
+Ingestion services
+External Data Services (EDS)
+Supporting Information
+OSDU Community utilities
+New Features
+Data Definition
+As with M15, M16 does not contain any in-place schema changes (no M15 schema resources were changed). Refer here for full list of OSDU changes "OSDU schemas" and full changes "OSDU reference-values"
+
+New Incremental Versions (Schema Changes)
+Connected Source/External Data Services
+master-data--ConnectedSourceDataJob:1.3.0 acting as activity
+master-data--ConnectedSourceRegistryEntry:1.2.0 acting as activity
+reference-data--ExternalReferenceValueMapping (new reference value list type)
+Wellbore
+master-data--Wellbore:1.3.0 with new properties;
+master-data--WellActivity:1.1.0 allowing rig assignments.
+Reference Value Changes/Updates
+Updated PPDM governed lists
+ConventionalCoreType:1.0.1, MarkerType:1.0.1, VelocityAnalysisMethod:1.0.1
+Content Changes
+CoordinateTransformation:1.1.0 and CoordinateReferenceSystem:1.1.0 IOGP updates and two CRSs removed.
+RepresentationType:1.0.0 StratigraphicRoleType:1.0.0
+UnitQuantity:1.0.0 adding cost UnitQuantity; UnitOfMeasure:1.0.0 adding cost UnitOfMeasure
+New Lists
+ExternalReferenceValueMapping:1.0.0, FluidContactType:1.0.0, ImageLightingCondition:1.0.0, RockImageType:1.0.0, WellboreReason:1.0.0 subject to change after expected PPDM revision.
+Formation Integrity Test related: FormationIntegritySurfacePressureDataSource:1.0.0, FormationIntegrityTestResult:1.0.0, FormationIntegrityTestType:1.0.0, FormationPressureTestType:1.0.0, MudBaseType:1.0.0
+New Entity Type Schemas
+Earth Modelling/Reservoir
+work-product-component--FluidBoundaryInterpretation with associated reference data type
+reference-data--FluidContactType
+work-product-component--SealedVolumeFramework
+Rock Samples
+work-product-component--RockImage with associated reference data types
+reference-data--ImageLightingCondition and reference-data--RockImageType
+Formation Integrity Test
+work-product-component--FormationIntegrityTest with associated reference data types:
+reference-data--FormationIntegritySurfacePressureDataSource reference-data--FormationIntegrityTestResult reference-data--FormationIntegrityTestType reference-data--FormationPressureTestType reference-data--MudBaseType
+Core and Helper Services
+Schema
+OSDU Data Definition M16 deliverables. See MR !443
+Register
+Add records topic v2 behind feature flag. See MR !298
+Indexer
+Index normalizedKind attribute under tags for all records. See MR !456
+Lib
+Add support for partition and properties specific feature flags. See MR !189
+Storage
+Connection to Redis must be protected by password. See MR !580
+Indexer Queue
+Add correlation-id and data-partition-id headers to logs and modify retry. See MR !282
+Policy
+New Features
+Minor Changes
+Ingestion services
+Manifest-based Ingestion
+Implemented code static-analysis in the CICD. See details. The analysis is already implemented. See MR !89
+SegY to VDS conversion
+AWS - Supports now the execution context in SegY to oVDS conversion in sdstore - see !13.
+DDMS
+Seismic DDMS
+Added implementation for Seismic Acquisition Survey api in sdms-V4
+Add support for Seismic Processing Project API
+Add support for Seismic Line Geometry API
+Added implementation for Seismic Bin Grid api in sdms-V4
+Added implementation for Seismic Trace Data api in sdms-V4
+Added 2D/3D Interpretation set schemas, fixed connection strings endpoints, reviewed the service code
+Make SDMS-V4 service dynamic by removing the hardcoded schema data from the service
+Wellbore DDMS
+Support of Wellbore:1.3.0, see issue !#56
+Support of MarkerType:1.0.1, see issue !#57
+Open API spec, add examples on bulk API - see !684
+Reservoir DDMS
+Add windows code compiling.
+Fix logging options
+Fix potential issues and based on static analysis
+Common code separated from vendor specific dependencies
+External Data Services (EDS)
+AWS - The EDS is now supported. Note that this is still an experimental feature. The EDS is not backwards compatible with previous releases of OSDU.
+Multiple Work product component ingestion: Now EDS supports multiple work product components with single and multiple dataset ids associated too.
+Keep some identification/flag in created records: To search the records for the provider identification /flag is setting up.
+Provide Start Date Time and End Date Time to fetch the records between the span: Provide the start date time and end date time to fetch the records between the given datetime span by modifying the Query build by the eds ingest
+Added new parameter ConnectedSourceSchemaAuthority : Provide new variable connectedSourceSchemaAuthority for provider's schemaAuthority and Replace the connectedSourceSchemaAuthority with the oningestionschemaAuthority.
+Changes in Workflow Parameters: Moving workflows to the ConnectedSourceRegistryEntry and using Activity Template to use the parameters.
+Introduced new schema for Reference Mapping Values ({{schema-authority}}:wks:reference-data--ExternalReferenceValueMapping:1.0.0)
+GCZ (Geospatial Consumption Zone)
+Ambassador Service now implements Authentication using OSDU Entitlement Groups
+Restricts ambassador service (update cache, get cache size) to authorized users only
+Postman Collection updated for Ambassador Endpoints
+Must add GCZ Groups to OSDU environment:
+service.gcz.viewer
+service.gcz.creator
+service.gcz.admin
+Added utility for parsing CSVs of Trajectory Stations (for use in Trajectory ingestion, planned for M17)
+Bug Fixes
+Core and Helper Services
+Lib
+Fix otherRelevantDataCountries naming. See MR !102
+Fix: Update otherRelevantCountry field in legal field. See MR !100
+Partition service feature flag impl fix. See MR !199
+Use alias to shorten the index names in multi-kind search. See MR !197
+Fix Netty handler Vulnerability. See MR !63
+Refactor 'RetrievalInstructionsResponse' model. See MR !190
+Partition
+Vul fix ibm partition service. See MR !345
+Indexer
+Create index alias when index is created. See MR !468
+Vulnerability fix ibm indexer service. See MR !445
+Search
+Use alias to shorten the index names in multi-kind searchMulti kind alias. See MR !423
+Adding retry for jersey client for Azure ITs in case of 502 and 503.. See MR !403
+Fix nested query - returns partial results when joining kind query with OR. See MR !369
+File
+Refactor Dataset model. See MR !415
+Vulnerability fix ibm file service. See MR !409
+Fix the whitesource issue in file-core and file-azure. See MR !405
+Unit
+Whitesource update and spring-fox migration to OpenApi. See MR !236
+Dataset
+Refactor 'RetrievalInstructionsResponse' model. See MR !296
+Vulnerability fix ibm dataset service. See MR !287
+Fix the witesource issue. See MR !286
+Storage
+Fix acl checking on azure CloudStorageImpl for reading version. See MR !591
+Vulnerability fix ibm storage service. See MR !587
+Update ORDC local cache to include data partition information. See MR !585
+Move conversion json checking from CrsConversionService to the separate class,.... See MR !579
+Schema
+Fix spring-boot-starter vulnerability. See MR !427
+Notification
+Dependency upgrade. See MR !311
+Indexer Queue
+Dependency upgrade. See MR !289
+Handle slow indexing. See MR !283
+CRS Conversion
+Mercator bug fixed after using Apache SIS 1.3 library. See MR
+Error Handling for Invalid Input Types. See MR !291
+Error Handling and security Vulnerability fixes. See MR !285
+Unit
+Whitesource update and spring-fox migration to OpenApi. See MR !236
+Legal
+Vulnerability fix ibm legal service. See MR !343
+Entitlements
+Jar type vulnerability fix for entitlements-service. See MR !404
+Upgrade Dependencies. See MR !398
+Policy
+Bug Fixes
+Ingestion services
+csv-parser
+Upgrade SnakeYaml dependency. See MR !331
+Segy to oZgy Conversion
+Bump OpenZgy version to 0.2.968. See MR !211
+Segy to oVDS Conversion
+Segy-to-oVDS has been tested with 3.1.3 image
+Ingestion Workflow
+Update dependencies. See MR !365
+DDMS
+Seismic DDMS
+
+Add condition for missing acl group
+Record delete doesn't affect entity
+Replaced six library with urllib.parse.quote and removed unused imports
+General bug fixes & stability improvement. Refer to service, sdapi, and sdutil for detailed notes
+Wellbore DDMS
+
+Security fix, certify lib upgrade - see !689
+FastAPI upgraded to 0.88 - see !674
+Adding Well Log performance tests - see !681
+Google - gcp renamed gc - see !699
+External Data Services (EDS)
+Reference Value Mapping: Logic must replace only the key and partition id, instead it replaced all "f" with "ft”. The Bug is now fixed. Issue 263
+Ingestion of the Multiple WPC: Fixed the issue from M15 now M16 supports multiple WPC ingestion. Issue 436
+Provide new variable connectedSourceSchemaAuthority for provider's schemaAuthority Issue 259
+Fix spring-boot-starter vulnerability. See MR !23
+Enhancements
+Core and Helper Services
+Storage
+Bypass info and swagger apis in collaboration filter. See MR !626
+Generate Swagger using springdoc-openapi. See MR !622
+Separate out records changed message for collaboration context. See MR !607
+Use partition based feature flag for collaboration. See MR !597
+CRS Conversion
+Update to use apache sis 1.3. See MR !283
+Lib
+GONRG-3120: Fix typing to be compliant with pytype. See MR !89
+Ingestion services
+osdu-airflow-lib
+GONRG-3120: Fix typing to be compliant with pytype. See MR !42
+osdu-ingestion-lib
+GONRG-3210: Make code to be compliant with PyType checker. See MR !33
+Known Issues/Gaps
+Refer here for a list of known pre-shipping testing issues.
+
+Ingestion services
+WITSML Parser
+Tubular. Known problem and work-around.
+Trajectory. Known problem.
+External Data Services (EDS)
+Duplicity of workflow parameters: since EDS DMS is still using Workflows from connectedSourceDataJob hence we are keeping it in connectedSourceDataJob too as of now. Issue 11
+Conversion of the ConnectedSourceDataPartitionID to OnIngestionDataPartitionID for Array Datatype: make modification in eds ingest to support the conversion of the the ConnectedSourceDataPartitionID to OnIngestionDataPartitionID Issue 261
+Search API not working when ID is given as filter.
+Dataset IDs without “:” in WPC not passing schema validation check.
+Supporting Information
+OSDU Community utilities
+AdminCLI and new Policy Management Desktop Client UI
+
+New Features and Minor Changes
+Breaking Changes
+Fixed Bugs
+Wellbore DDMS Data Loader updated to 0.0.1a302
+
+Fixes issue #56 and #57

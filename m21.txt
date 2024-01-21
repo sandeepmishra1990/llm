@@ -1,0 +1,261 @@
+M21 Release Notes
+Milestone M21
+Released on 23-November-2023
+
+For a complete overview of the issues and merge requests, please refer here.
+
+For detailed services that are included in this release, please refer to M21 tagging notes.
+
+❗ Important Note
+M22 (v0.25.0) Change Warning
+OSDU uses group-type classifications for the entities. The definitions for the group-types are provided in the Schema Usage Guide. Over time some of the entities' group-type classifications have been challenged. The following types appear in the wrong group-type:
+
+Reports are seen as non-tangible state descriptions/snapshots
+master-data--FluidsReport proposed migrated to → work-product-component--WellFluidsReport.
+master-data--OperationsReport proposed migrated to → work-product-component--WellOperationsReport.
+Tubulars - when exchanged they are often transported using datasets/files, but the data themselves are tangible and associated with an investment making them master-data.
+work-product-component--TubularAssembly proposed migrated to → master-data--TubularAssembly.
+work-product-component--TubularComponent proposed migrated to → master-data--TubularComponent.
+work-product-component--TubularExternalComponent proposed migrated to → master-data--TubularExternalComponent.
+Obviously, this will impact operators who have ingested a large number of such data/records. This advance notice is intended to prepare for this change and/or engage with data definitions, specifically the Well Delivery work-stream, to influence the implementation of the change.
+
+There is a schema preview including documentation provided in the Data Definitions community mirror.
+
+Sandbox/Incubator
+Project status: https://osdu.projects.opengroup.org/pmc/work-products/pmc-portal/pmc-policies/main/maturity/maturity-list.html
+
+In keeping with our policy of releasing new capabilities early and often for feedback, we are pleased to introduce several new Sandbox/Incubator platform capabilities in this milestone release. These are currently only available in specific cloud service providers with limited scopes and functionalities, future milestone releases will include more CSP support. Please refer to the details below.
+
+Policy service - AWS, Azure, GC, IBM
+Geospatial Consumption Zone - Azure
+Manifest ingestion by reference - GC, AWS, Azure
+Rock and Fluid Sample DDMS - Azure
+Energistics Parsers - Azure
+For the evaluation metrics - please refer to the guide here
+
+Deprecation Notice
+We are now actively engaged in the process of integrating the functionalities of the File and Dataset services. It is important to note that, going forward, our primary focus will be on enhancing and prioritizing the capabilities of the Dataset service in the domain of file/dataset delivery. As of the present, both services remain accessible and operational. Further elaboration on this matter will be communicated in due course.
+Table of Content
+Milestone M21
+❗ Important Note
+M22 (v0.25.0) Change Warning
+Sandbox/Incubator
+Deprecation Notice
+Table of Content
+New Features
+Data Definition
+M21 (v0.24.0) Additions
+Core and Helper Services
+Ingestion services
+External Data Services (EDS)
+DDMS
+Bug Fixes
+Core and Helper Services
+Ingestion services
+External Data Services (EDS)
+DDMS
+Geospatial Consumption Zone (GCZ)
+Enhancements
+Core and Helper Services
+Ingestion services
+External Data Services
+DDMS
+Geospatial Consumption Zone (GCZ)
+Known Issues/Gaps
+Supporting Information
+New Features
+Data Definition
+M21 (v0.24.0) Additions
+Generic Domain
+osdu:wks:master-data--Risk:1.2.0 can now also relate to responsible parties by reference to master-data--UserProfile in addition to the 'by value' inclusion of AbstractContact. The alternative descriptions of contacts and UserProfiles can be justified by the different purposes of the records: the explicit values in the included AbstractContact describe the actual state of the contact at the time of the risk evaluation and the 'by reference' UserProfile can relate to the master-data record of the user; the user may move on to other roles and responsibilities than recorded in the AbstractContact.
+osdu:wks:reference-data--ParentMatchingRuleSets:1.2.0 is revised/extended in the data.MatchingRules[].Conditions[] with a new ReplaceProperty, see changes.
+osdu:wks:reference-data--FacetRole:1.1.0 got extended with a relationship to FacetType to clearly express the business rule, which FacetType the FacetRole is qualifying, and which values to be paired in AbstractFacet. The reference values are updated with populated FacetTypeID relationships.
+osdu:wks:AbstractContactUserProfile:1.0.0, a convenience schema fragment combining 'by value' AbstractContact with a 'by reference' relationship to UserProfile.
+Geophysics Domain
+Gravity and Magnetics
+Initial creation of a osdu:wks:master-data--GravityMagneticAcquisitionSurvey:1.0.0 capturing the acquisition of (passive) gravity and or magnetic geophysical measurements. The surveys can be further classified via the following reference new value lists:
+osdu:wks:reference-data--AirborneClearanceMethod:1.0.0 — The airborne survey ground clearance method, for example, constant or drape.
+osdu:wks:reference-data--AirborneInstrumentation:1.0.0 — The instruments or equipment used to measure the specified flying height. This can be one or several different types of equipment, for example, laser scanner, GPS, radar altimeter.
+osdu:wks:reference-data--GravityMagneticAcquisitionPlatform:1.0.0 — The acquisition platform method for this survey, for example, airborne, marine, land, satellite, borehole, ocean bottom, UAV, etc.
+osdu:wks:reference-data--GravityMagneticDataAcquisitionType:1.0.0 — The type of gravity and magnetics geophysical data acquired in this survey, for example, gravity, magnetic, full tensor gradiometry/airborne gravity gradiometry. This could be one or several acquisition types that were acquired simultaneously in the same survey.
+Seismic
+Support for seismic 2D line navigation content. This is achieved by
+a specialized osdu:wks:dataset--File.SeismicLineGeometry.1.0.0, and
+a content schema osdu:wks:content--SeismicTraceNavigation:1.0.0, employing AbstractSpatialLocation with a GeoJSON property schema
+osdu:wks:AbstractGeoJson.PropertiesSeismic2DLineNavigation:1.0.0 to carry seismic trace labels.
+Rock and Fluid Sample Analysis
+Partial release of sample analysis entities, with a placeholder for a future master-data--Sample:
+osdu:wks:work-product-component--SamplesAnalysis:1.0.0 as the fully digital version of the analysis covering one or many samples. This work-product-component entity provides generic discoverability via Search; content is queryable via the Rock and Fluids DDMS.
+osdu:wks:work-product-component--SamplesAnalysesReport:1.0.0, similar to the above, however, primarily a report containing/referring to multiple sample analyses. When parsed, the report may produce multiple SamplesAnalysis, which are tied back to the original report.
+The analyses refer to samples, however, the current osdu:wks:master-data--Sample:1.0.0 is not completed yet and acts as a placeholder, which is extended in a later milestone to cover acquisition and activity details.
+Sample analysis comes with classifications, which are captured by reference-data:
+OPEN osdu:wks:reference-data--SampleAnalysisFamily:1.0.0 and
+OPEN osdu:wks:reference-data--SampleAnalysisSubFamily:1.0.0 are combined in
+OPEN osdu:wks:reference-data--SampleAnalysisType:1.0.0 as the ultimate classification of analyses.
+LOCAL osdu:wks:reference-data--SamplesAnalysisCategoryTag:1.0.0 allows operator specific tagging of the analyses.
+RockImage osdu:wks:work-product-component--RockImage:1.3.0: Adding a new incremental schema version allowing a firm vertical referencing of the image depths as well as the driller's or logger's depth classification.
+Well Domain
+osdu:wks:master-data--Wellbore:1.5.0: Correction of data.WellboreCosts[].ActivityTypeID to refer to reference-data--WellActivityType.
+Extensions to osdu:wks:master-data--IsolatedInterval:1.2.0, added properties listed here with relations to new reference-data types:
+osdu:wks:reference-data--IsolatedIntervalCementOption:1.0.0 Cement option used for the isolated interval, for example, Cemented, Uncemented.
+osdu:wks:reference-data--IsolatedIntervalClassification:1.0.0 Isolated interval classification, for example, Single Completion, Dual Completion, Mixed Water Injection, Produced Water Injection, Reservoir Surveillance, Sour Gas Producer, Sour Oil Producer, Sweet Gas Producer, Sweet Oil Producer.
+osdu:wks:reference-data--IsolatedIntervalIsolationMechanism:1.0.0 Isolated interval isolation mechanism, for example, Swellable Packers, Cement, Hydraulic Swell Packers, Inflatable Packers, etc.
+osdu:wks:reference-data--IsolatedIntervalZoneAccessMechanism:1.0.0 Isolated interval zone access mechanism, for example, Abrasive Jet, Casing Deployed Perforations, Pump down, Plug & Perf, Tubing Conveyed Perforation, Sliding Sleeves, etc.
+Reservoir Management
+Increased integration with the Earth Modeling domain by allowing references to data records created by the Reservoir DDMS. An interaction scenario is worked out in the WorkedExamples section.
+osdu:wks:AbstractGenericReservoirUnit:1.1.0 has some deprecated properties, which were 'moved' to ReservoirSegment. Changes are detailed here.
+osdu:wks:master-data--Reservoir:1.1.0 is updated to include the AbstractGenericReservoirUnit:1.1.0. Changes are detailed here.
+osdu:wks:master-data--ReservoirSegment:1.1.0 is updated to include the AbstractGenericReservoirUnit:1.1.0 and allows now relationships to ReservoirCompartmentInterpretation via CompartmentInterpretationID and further identifying a CompartmentMemberIdentifier. Changes are detailed here.
+Core and Helper Services
+Schema
+Resolve "OSDU-DD-Delivery-M21 (v0.24.0)". See MR !567 by (@chad)
+Policy
+Rego Validation, Audit and tracing improvements. See MR !429 by (@hutchins). For more information on all the new features, see Policy Service Release Notes
+Ingestion services
+External Data Services (EDS)
+osdu-airflow-lib
+Cleaned static string from the code. See MR !181 by (@priyankabhongade)
+Logic to handle Blank Spaces In filter Attribute and Cleaned all static string parameter by moving in Constant file. See MR !179 by (@priyankabhongade)
+Logic to handle records Ids provided in filter attribute of CSDJ. See MR !176 by (@priyankabhongade)
+Logic to handle Id in CSDJ Filter , failed record updation in CSDJ. See MR !170 by (@priyankabhongade)
+DDMS
+Wellbore DDMS
+Add "Server-Timing" header in response. See MR !791 by (@Vernet)
+Seismic DDMS
+seismic-dms-service
+Feat: add insights logging. See MR !911 by (@rgray11)
+Feat: API endpoint to retrieve dataset sizes. See MR !882 by (@iza)
+Feat: Feature/#103 add wpc seismic fault1.2.0 data type. See MR !851 by (@lbroda)
+seismic-dms-sdutil
+Fix: cp allow f to use as force flag. See MR !113 by (@dperez50)
+Reservoir DDMS
+Use of configuration file instead of environment variable. See MR ! 196
+Support very large object size above negotiated message size. See MR !215
+Rock & Fluid Samples DDMS
+Support for new "analysis types" were added to the v2 SampleAnalyses endpoints (see detailed notes).
+Added a new GET content schema endpoint (!101)
+Added new Jupyter Notebook with end-to-end examples of how to use the v2 APIs (!100)
+Bug Fixes
+Core and Helper Services
+Indexer
+Change the default setting of trackTotalCount to false in SearchRequest. See MR !630 by (@zhibinmai)
+Resolve the bug of "/reindex/record API returns 500 when there is no not-found records". See MR !628 by (@mzhu9)
+Dataset
+Fixed bugs with validation of requests (GONRG-7698). See MR !376 by (@Stanislav_Riabokon)
+Partition
+Make request reject handler global. See MR !468 by (@nthakur)
+Change response code for RequestRejectedException. See MR !453 by (@NKhandelwal6)
+Storage
+Handling validation and error in storage filters. See MR !774 by (@deepapathak)
+CRS Conversion
+Resolve "Error is thrown from the convert API for below input request.". See MR !374 by (@kiranallamsety)
+Entitlements
+Added redis connection error handling (GONRG-7597). See MR !556 by (@Yurii_Ruban)
+Added check redis connection (GONRG-7597). See MR !536 by (@Yurii_Ruban)
+Policy
+M21 bugfix for azure. See MR !444 by (@hutchins)
+Bugfix for Policy Service handle entitlement service issues more gracefully. See MR !435
+OQM
+Fix channel handling for RabbitMQ driver, mock Partition in int tests. See MR !44 by (@Rustam_Lotsmanenko)
+Ingestion services
+csv-parser
+Enable gc int tests. See MR !409 by (@Rustam_Lotsmanenko)
+External Data Services (EDS)
+osdu-airflow-lib
+Fixed wrong function name to fetch parent data. See MR !183 by (@jeyakumar-jk)
+M21 parent data mapping. See MR !172 by (@jeyakumar-jk)
+EDS DMS
+Synchronized the securitySchemeThreads operations.. See MR !102 by (@ShankarPattanayak)
+DDMS
+Wellbore DDMS
+
+Wellbore-anthos-lib
+Add mapping NoSuchKey => ResourceNotFoundException. See MR !11 by (@dodv)
+Seismic DDMS
+
+seismic-dms-service
+Fix: fixed lock error. See MR !934 by (@DiegoMolteni)
+Fix: update cryptographic hash and encryption. See MR !896 by (@rgray11)
+Fix: add missing readonly param to Dataset List Search. See MR !887 by (@rgray11)
+Fix: fixed list endpoint. See MR !876 by (@DiegoMolteni)
+Fix: fixing list hierarchal group call. See MR !864 by (@KiranV)
+Reservoir DDMS
+
+Fix instability when client forcefully close connection. MR !232
+Check server status now includes Postgres connectivity. MR !229
+AWS: fix issues when starting server before OSDU partition is created. MR !242
+AWS: fix on permission issues. MR !214
+Fixes in environment variables with Azure instance. MR !223 and !213
+Rock and Fluid Samples DDMS
+
+Errors fixed in the content schemas for extraction tests !99
+Switch from using "weight" to "mass" in several content schemas !110
+Updated Geochemistry schemas to have a new Method property !111
+Switch from Biomarkers to Compounds in naming !104
+Updated v1 schemas for fractionation and extraction !120
+Geospatial Consumption Zone (GCZ)
+FIX: Transformer not building resources folder to the JAR
+Was causing all log contents to be written to console instead of the intended separate app.log file.
+FIX: Provider incorrectly parsing spatial query when input is stringified geometry
+Helm Chart + Docker Image updates
+Enhancements
+Core and Helper Services
+Indexer
+Always update schema mapping to ElasticSearch when re-index is triggered. See MR !611 by (@zhibinmai)
+Elevate permission for fullReindex API. See MR !609 by (@NKhandelwal6)
+Dataset
+Java 17 Migration. See MR !378 by (@thulasi_dass)
+Notification
+Solxget/java 17 test. See MR !438 by (@solxget)
+CRS Conversion
+Endpoints V4 Covered with Experimental Swagger Tag. See MR !380 by (@jayeshbagul)
+Ingestion services
+External Data Services
+osdu-airflow-lib
+Added airflow log for any token generation issues. See MR !178 by (@jeyakumar-jk)
+Added code for Parent data mapping. See MR !168 by (@jeyakumar-jk)
+EDS DMS
+Generate Swagger using springdoc-openapi OAS 3.0. See MR !100 by (@jayeshbagul) -'osdu-airflow-lib'
+Naturalizing the external bulk data into internal - MVP 2. See MR!166 MR!185 by (@nisha.thakran)
+DDMS
+Seismic DDMS
+
+seismic-dms-service
+Fix: removed secret from abstraction. See MR !900 by (@DiegoMolteni)
+Feat: code enhanced and pre-hook added. See MR !899 by (@DiegoMolteni)
+seismic-dms-sdutil
+Fix: added support for dataset access policy. See MR !114 by (@DiegoMolteni)
+Reservoir DDMS
+
+Improve speed and memory consumption on SSL client for RESQML download from Reservoir DDMS. MR !230
+Improve responsiveness with new threading strategy. MR !218
+Improve server performance. MR !220
+Improve performance when listing dataspaces.MR !225
+Well Delivery DDMS
+
+OpenAPI 3.0 Documentation using springdoc. See MR !230 by (@jayeshbagul)
+Rock & Fluid Samples DDMS
+
+Small changes to existing schemas (see detailed notes).
+Geospatial Consumption Zone (GCZ)
+Initial Support added for ingestion of Well Markers & Well Logs
+Transformer can now use Python to interpolate Marker Points and Well Log segments between Trajectory stations when data prerequisites are met
+Caveat: Log (as Trajectory segment) support is rudimentary in this initial release - only producing LineStrings with two points: begin and end.
+Postman Collection updated to demonstrate WellLog support
+Documentation added for Well Marker and Well Log support
+GCZ Provider updates Koop to latest version
+GCZ Provider endpoints no longer use '/gcz/' in the URL path.
+OLD: "ignite-provider/rest/services/gcz/FeatureServer/:layer"
+NEW: "ignite-provider/rest/services/FeatureServer/:layer"
+Requests to FeatureServer endpoint (without layer) will now return a general service definition (as configured in koop-config.json) which may help with compatability to clients like ArcGIS Pro
+Postman Collection updated to no longer use "/gcz/" in the URL path
+Known Issues/Gaps
+Refer here for a list of known pre-shipping testing issues.
+
+For full scope - please refer here
+
+Supporting Information
+Data Loading Guide. See here
+Preship team's test results (documented steps). See here
+Postman collections from QA aka "Platform Validation" team. See here
+JSON payload and related information for loading sample data from TNO, Volve, NOPIMS. See here

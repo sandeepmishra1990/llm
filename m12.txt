@@ -1,0 +1,132 @@
+M12 Release Notes
+Milestone 12
+Released on 12-Jul-2022
+
+For detailed services that are included in this release, please refer to M12 tagging notes
+
+New Features
+Data Definition - Refer here for full changes "OSDU schemas" and full changes "OSDU reference-values"
+Schema Highlights
+From M12 onwards schemas are now read-only, status PUBLISHED. Changes will require new schema versions, a procedure, which was already in practised for many kinds of changes.
+Additions
+Coring (master-data), RockSample (master-data), RockSampleAnalysis (work-product-component) and a number or reference-data types.
+This milestone introduces types to support first level of Coring, RockSample , and RockSampleAnalysis, focussing on supporting Routine Core Analysis (RCA). Details via worked example.
+ProcessedInSAR (work-product-component with reference-data types).
+Interferometric Synthetic Aperture Radar (InSAR) is a representation of surface or ground deformation from satellite radar image data over time. Documentation.
+Earth Modelling
+Faulted reservoirs (voidage group, reservoir compartment work-product-components). Details via worked example.
+ETPDataset (dataset)
+Schema Changes - Please see the Migration Guide for M12 to achieve the additional value. While there are deprecations the changes are additive, thus generally considered non-breaking.
+const keyword values are supplemented with explicit type to satisfy the indexer. - VerticalMeasurement clarifications, see Usage Guide, Documentation.
+Revision of Technical Assurance, which deprecates an element in AbstractCommonResources and adds specializations to AbstractMaster and AbstractWPCGroupType. Usage Guide, Migration Guides.
+DataQuality changes; Migration Guides.
+AbstractActivityParameter key type extensions.
+CoordinateReferenceSystem, CoordinateTransformation - New 1.1.0 version with added Wgs84Coordinates GeoJSON structures. The reference values are updated to contain this information, see below.
+UnitOfMeasure - References from AbstractAnyCrsFeatureCollection supporting the V3 APIs of the CRS Conversion service.
+Well Status and Classification V3 (PPDM) - A number of PPDM sourced reference-data types were revised and/or improved. The classification of Well and Wellbore according to PPDM is now possible. Full adoption requires mappings, which can be facilitated in an operator specific fashion via WellStatusSummary. Migration Guides.
+Reference Value Highlights
+Updated, Geomatics approved default CRS Catalog content in the form of a large reference value manifest file.
+The governance is still LOCAL and large operators will replace the content entirely. Records now conform to the 1.1.0 versions of CoordinateReferenceSystem and CoordinateTransformation.
+LogCurveFamily was corrected for a number of non-dimensional codes.
+PPDM governed lists including new reference values for Well Status and Classification; See details.
+Governance Mode changes details for FacilityStateType, PlayType, WellboreTrajectoryType (all now PPDM sourced).
+New reference value lists for the new models
+ProcessedInSAR
+Coring, RockSample, RockSampleAnalysis
+Technical Assurance (incomplete LOCAL)
+Updated Schema Usage Guide
+Core and Helper Services
+Storage
+Audit logs can be toggled off per partition. See ADR
+Partition ID can be passed in OPA request URL. See MR !412
+Storage updated with GeoJSON schema. See MR !411
+GCP Storage service context is now split into two separate contexts, one for serving HTTP requests via API that is still bound to request scope, and one for message event processing which contains overridden bean definitions, not limited with request scope. See MR !401
+Azure Schema endpoint has been deprecated with feature flag. See MR !400
+File
+Checksum calculation is enabled for files while making use of /metadata endpoint. Checksum is calculated automatically while saving File Metadata Record, and is stored as part of metadata storage record in Checksum attribute. Available on Azure using MD5 algorithm. See ADR
+Search
+GCP Added ByIntersectionQuery, WithinPolygonQuery to support change in CRS v3. See MR !270
+Indexer Queue
+GCP Implemented push approach to send Index/Reindex requests to IndexerService. See MR !190
+CRS Catalog V3
+Created new API V3: The new API is documented on the Core Services Overview wiki. The new CRS Catalog v3 API leverages the contents of the current reference data into new API. The previous version of the CRS Catalog API is still available for transition purpose but will be deprecated when decided by the PMC.
+CRS Conversion V3
+Created new endpoint in the CRS conversion API. The new API is documented on the Core Services Overview wiki.The following endpoints were added Convert, ConvertTrajectory, ConvertGeoJson.
+Ingestion Services
+WITSML Parser
+Update to wellbore Trajectory schema 1.1.0 (AvailableTrajectoryStationProperties now in place) See issue #54
+DDMS
+Seismic DDMS
+Added anthos configuration. See MR !367
+Add storage interface using GCS C++ Client Library. See MR !138
+Wellbore DDMS
+Add support of WellLog 1.2.0. See issue #38
+Add API to get bulk statistics for WellLog. See issue #39. See tutorial.
+Initial Anthos | Google support.
+Readiness probe now use a dedicated endpoint.
+Bulk session commit API response now contains the record version.
+Cost reduction, decrease logging level from Dask.
+Cost reduction on Azure, decrease logging from AzureSDK.
+On Azure, add Prometheus instrumentator for monitoring.
+Audit and Metric
+Provides KPI metrics which can help Operators to have a better governance on their Data Platform and effectively manage their resources - GCP only
+Bug Fixes
+Core and Helper services
+Storage
+Fix token provisioning for anthos. See MR !421
+Fix outdated storage API spec. See issue #37
+Register
+Azure Fix topic response in Get All Topics API. See issue #38
+Notification
+Update new tutorial documentation. See issue #41
+Entitlement
+Allow OPS user to manage groups and group member. See issue #105
+Indexer
+Enable sort and aggregation on primitive text array. See issue #92
+Fix coordinates deserialization error. See issue #63
+Use index delete api for IT post clean-up, it will properly clear cache on index deletion, reducing IT flakiness. It also removes usage of deprecated index-cleanup endpoint in GCP. See MR !307
+Indexer Queue
+IBM - Topic or queue switch logic added. See MR !204
+GCP - Fixed pull subscription type activation condition. See MR !194
+Jackson-databind upgrade 2.11.4 -> 2.13.2.2 for security fixes
+Ingestion services
+CSV Parser
+CSV parser workflow implemented in AWS - See issue #70
+DDMS
+Seismic DDMS
+Azure cosmos DB redesign to improve general performances. See MR !304
+General bug fixes & stability improvement. Refer to service, sdapi, and sdutil for detailed notes
+Wellbore DDMS
+performance improvement when requesting a large number of columns of a Welllog with 1000+ column bulk.
+on Azure monitoring, fix trace on long URL.
+fix/update model examples.
+security, record id parameter validation enforcement.
+FastAPI upgrade to 0.68.2.
+Supporting Information
+Postman Collections
+Well delivery DDMS
+An updated Postman collection has been published here.
+Load Manifests (JSON)
+Wellbore Trajectory for revised schema
+Manifests can be found here
+Breaking Changes
+Deprecation Notice
+Airflow
+Airflow 1.x will no longer be supported on AWS, Azure, IBM, GCP. See issue #48
+DDMS
+Wellbore DDMS
+All fast-search and search /ddms/v3/query/wellbores will be deprecated. See issue #40.
+Seismic DDMS
+Azure database model
+Known Issues/Gaps
+WITSML Parser
+Wellbore Tubular data type - need to pre-create parent record TubularAssembly.
+Wellbore Trajectory data type - currently broken after recent code revision.
+CRS Catalog V3
+Ensure that Reference data (for CRS entities) is populated for schema version 1.1.0
+CRS Conversion V3
+Ensure that Reference data (for CRS entities) is populated for schema version 1.1.0
+Manifest based Ingestion
+Load test showed problems for large number of records such as 50,000 records
+Well Delivery DDMS
+GCP There is a known issue in the ID entity where only lower-cased IDs are accepted. See issue #306
